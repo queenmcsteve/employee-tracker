@@ -1,3 +1,5 @@
+USE employee_db;
+
 INSERT INTO department (name) VALUES ('Research & Design'), ('Production'), ('Sales & Marketing'), ('Finance & Accounting');
 
 INSERT INTO role (title, salary, department_id) 
