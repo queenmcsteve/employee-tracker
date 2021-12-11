@@ -118,7 +118,7 @@ const viewEmployees = async () => {
 const addDept = async () => {
   let answer = await inquirer.prompt({
     type: "input",
-    message: "Enter the name of the new department:",
+    message: "enter the name of the new department:",
     name: "newDept",
   });
   let newDepartment = answer.newDept;
@@ -128,8 +128,6 @@ const addDept = async () => {
     let display = "SELECT * FROM department";
     const res = await connection.query(display);
     console.table(res[0]);
-    // console.log(res);
-    // console.table(res[0]);
   } catch (err) {
     throw err;
   }
@@ -137,7 +135,38 @@ const addDept = async () => {
 
 // function to add a role
 const addRole = async () => {
-  console.log("Add a Role");
+  let depts = `SELECT name, id FROM department`;
+  let deptList = await connection.query(depts);
+  console.log(deptList[0]);
+  let answer = await inquirer.prompt([
+    {
+      type: "input",
+      message: "enter a name for the new role:",
+      name: "title",
+    },
+    {
+      type: "input",
+      message: "enter the salary for the new role:",
+      name: "salary",
+    },
+    {
+      type: "list",
+      message: "select the department for the new role:",
+      name: "department_name",
+      choices: deptList[0],
+    },
+  ]);
+  let getDeptId = `SELECT id FROM department WHERE name = "${answer.department_name}"`;
+  let deptID = await connection.query(getDeptId);
+  try {
+    let query = `INSERT INTO role (title, salary, department_id) VALUES ("${answer.title}", "${answer.salary}", "${deptID[0][0]["id"]}")`;
+    const ins = await connection.query(query);
+    let display = "SELECT * FROM role";
+    const res = await connection.query(display);
+    console.table(res[0]);
+  } catch (err) {
+    throw err;
+  }
 };
 
 // function to add an employee
