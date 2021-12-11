@@ -35,55 +35,119 @@ const homeStart = async () => {
     });
     switch (answer.action) {
       case "view departments":
-        viewDepts();
+        await viewDeptsAsync();
         break;
       case "view all roles":
-        viewRoles();
+        await viewRoles();
         break;
       case "view all employees":
-        viewEmployees();
+        await viewEmployees();
         break;
       case "add a department":
-        addDept();
+        await addDept();
         break;
       case "add a role":
-        addRole();
+        await addRole();
         break;
       case "add an employee":
-        addEmployee();
+        await addEmployee();
         break;
       case "update an employee":
-        updateEmployee();
+        await updateEmployee();
         break;
       case "exit":
-        connection.end();
-        break;
+        await connection.end();
+        return;
     }
   } catch (err) {
     console.log(err);
-    homeStart();
   }
+  homeStart();
 };
 
 // function to view departments
-const viewDepts = async () => {};
+// function viewDepts() {
+//   console.log("View Departments");
+//   let query = "SELECT * FROM department";
+//   connection
+//     .query(query)
+//     .then((res) => {
+//       console.table(res[0]);
+//       homeStart();
+//     })
+//     .catch((err) => {
+//       throw err;
+//     });
+// }
 
+async function viewDeptsAsync() {
+  try {
+    console.log("View Departments");
+    let query = "SELECT * FROM department";
+    const res = await connection.query(query);
+    console.table(res[0]);
+  } catch (err) {
+    throw err;
+  }
+}
 // function to view all roles
-const viewRoles = async () => {};
+const viewRoles = async () => {
+  try {
+    console.log("View Roles");
+    let query = "SELECT * FROM role;";
+    const res = await connection.query(query);
+    console.table(res[0]);
+  } catch (err) {
+    throw err;
+  }
+};
 
 // function to view all employees
-const viewEmployees = async () => {};
+const viewEmployees = async () => {
+  try {
+    console.log("View Employees");
+    let query = "SELECT * FROM employee;";
+    const res = await connection.query(query);
+    console.table(res[0]);
+  } catch (err) {
+    throw err;
+  }
+};
 
 // function to add a dept
-const addDept = async () => {};
+const addDept = async () => {
+  let answer = await inquirer.prompt({
+    type: "input",
+    message: "Enter the name of the new department:",
+    name: "newDept",
+  });
+  let newDepartment = answer.newDept;
+  try {
+    let query = `INSERT INTO department (name) VALUES ("${newDepartment}")`;
+    const ins = await connection.query(query);
+    let display = "SELECT * FROM department";
+    const res = await connection.query(display);
+    console.table(res[0]);
+    // console.log(res);
+    // console.table(res[0]);
+  } catch (err) {
+    throw err;
+  }
+};
 
 // function to add a role
-const addRole = async () => {};
+const addRole = async () => {
+  console.log("Add a Role");
+};
 
 // function to add an employee
-const addEmployee = async () => {};
+const addEmployee = async () => {
+  console.log("Add an Employee");
+};
 
 // function to update an employee
-const updateEmployee = async () => {};
+const updateEmployee = async () => {
+  console.log("Update an Employee");
+};
 
 homeStart();
