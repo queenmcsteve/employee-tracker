@@ -35,7 +35,7 @@ const homeStart = async () => {
     });
     switch (answer.action) {
       case "view departments":
-        await viewDeptsAsync();
+        await viewDepts();
         break;
       case "view all roles":
         await viewRoles();
@@ -65,22 +65,8 @@ const homeStart = async () => {
   homeStart();
 };
 
-// function to view departments
-// function viewDepts() {
-//   console.log("View Departments");
-//   let query = "SELECT * FROM department";
-//   connection
-//     .query(query)
-//     .then((res) => {
-//       console.table(res[0]);
-//       homeStart();
-//     })
-//     .catch((err) => {
-//       throw err;
-//     });
-// }
-
-async function viewDeptsAsync() {
+// function to view all depts
+async function viewDepts() {
   try {
     console.log("View Departments");
     let query = "SELECT * FROM department";
@@ -94,7 +80,8 @@ async function viewDeptsAsync() {
 const viewRoles = async () => {
   try {
     console.log("View Roles");
-    let query = "SELECT * FROM role;";
+    let query =
+      "SELECT role.id, role.title, department.name as department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;";
     const res = await connection.query(query);
     console.table(res[0]);
   } catch (err) {
@@ -106,7 +93,8 @@ const viewRoles = async () => {
 const viewEmployees = async () => {
   try {
     console.log("View Employees");
-    let query = "SELECT * FROM employee;";
+    let query =
+      "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, employee.manager_id FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department on role.department_id = department.id;";
     const res = await connection.query(query);
     console.table(res[0]);
   } catch (err) {
@@ -139,7 +127,6 @@ const addRole = async () => {
   console.log("Add Role");
   let depts = `SELECT name, id FROM department`;
   let deptList = await connection.query(depts);
-  console.log(deptList[0]);
   let answer = await inquirer.prompt([
     {
       type: "input",
