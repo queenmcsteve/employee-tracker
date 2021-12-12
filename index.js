@@ -230,6 +230,38 @@ const updateEmployee = async () => {
   try {
     console.log("Update Employee");
     let employees = await connection.query("SELECT * FROM employee");
+    let employeeSelect = await inquirer.prompt([
+      {
+        name: "employee",
+        type: "list",
+        message: "select an employee to update:",
+        choices: employees[0].map((employeeName) => {
+          return {
+            name: employeeName.first_name + " " + employeeName.last_name,
+            value: employeeName.id,
+          };
+        }),
+      },
+    ]);
+    let roles = await connection.query("SELECT * FROM role");
+    let roleSelect = await inquirer.prompt([
+      {
+        name: "role",
+        type: "list",
+        message: "select the new role for the employee:",
+        choices: roles[0].map((roleName) => {
+          return {
+            name: roleName.title,
+            value: roleName.id,
+          };
+        }),
+      },
+    ]);
+
+    let ins = await connection.query(`UPDATE employee SET ? WHERE ?`, [
+      { role_id: roleSelect.role },
+      { id: employeeSelect.employee },
+    ]);
   } catch (err) {
     throw err;
   }
