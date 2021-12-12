@@ -4,7 +4,7 @@
 
 ## Description:
 
-A command-line employee tracking program using MYSQL & Node Inquirer.
+A command-line employee database program using MYSQL & Node Inquirer.
 
 ## Table of contents:
 
@@ -25,7 +25,7 @@ As this is a command line program, there are no screenshots of the program itsel
 # Installation Instructions
 
 - Run the sql files in db subdirectory:
-  - in mysql, run `\. db\schema.sql` then `\. db\seeds.sql` to populate the db with dummy data
+  - in mysql, run `\. db\schema.sql` then optionally `\. db\seeds.sql` if you'd like to pre-populate the db with dummy data
 - Run `npm i` to install dependencies
 - Run `node index.js` to start the program.
 
