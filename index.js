@@ -116,6 +116,7 @@ const viewEmployees = async () => {
 
 // function to add a dept
 const addDept = async () => {
+  console.log("Add Department");
   let answer = await inquirer.prompt({
     type: "input",
     message: "enter the name of the new department:",
@@ -135,6 +136,7 @@ const addDept = async () => {
 
 // function to add a role
 const addRole = async () => {
+  console.log("Add Role");
   let depts = `SELECT name, id FROM department`;
   let deptList = await connection.query(depts);
   console.log(deptList[0]);
@@ -172,11 +174,65 @@ const addRole = async () => {
 // function to add an employee
 const addEmployee = async () => {
   console.log("Add an Employee");
+  let roles = await connection.query(`SELECT * FROM role`);
+  let managers = await connection.query(`SELECT * FROM employee`);
+  let answer = await inquirer.prompt([
+    {
+      type: "input",
+      name: "first_name",
+      message: "enter their first name:",
+    },
+    {
+      type: "input",
+      name: "last_name",
+      message: "enter their surname:",
+    },
+    {
+      type: "list",
+      name: "role",
+      message: "select their role:",
+      choices: roles[0].map((role) => {
+        return {
+          name: role.title,
+          value: role.id,
+        };
+      }),
+    },
+    {
+      type: "list",
+      name: "manager",
+      message: "select their manager:",
+      choices: managers[0].map((manager) => {
+        return {
+          name: manager.first_name + " " + manager.last_name,
+          value: manager.id,
+        };
+      }),
+    },
+  ]);
+  try {
+    let query = await connection.query("INSERT INTO employee SET ?", {
+      first_name: answer.first_name,
+      last_name: answer.last_name,
+      role_id: answer.role,
+      manager_id: answer.manager,
+    });
+    let display = "SELECT * FROM employee";
+    const res = await connection.query(display);
+    console.table(res[0]);
+  } catch (err) {
+    throw err;
+  }
 };
 
 // function to update an employee
 const updateEmployee = async () => {
-  console.log("Update an Employee");
+  try {
+    console.log("Update Employee");
+    let employees = await connection.query("SELECT * FROM employee");
+  } catch (err) {
+    throw err;
+  }
 };
 
 homeStart();
