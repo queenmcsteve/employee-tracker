@@ -249,6 +249,9 @@ const updateEmployee = async () => {
       { role_id: roleSelect.role },
       { id: employeeSelect.employee },
     ]);
+    let display = "SELECT * FROM employee";
+    const res = await connection.query(display);
+    console.table(res[0]);
   } catch (err) {
     throw err;
   }
