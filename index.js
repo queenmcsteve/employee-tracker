@@ -257,4 +257,5 @@ const updateEmployee = async () => {
   }
 };
 
+// initiate the program
 homeStart();
