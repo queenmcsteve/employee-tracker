@@ -4,7 +4,7 @@
 
 ## Description:
 
-A command-line employee database program using MYSQL & Node Inquirer.
+A command-line employee tracking program which uses Node Inquirer to view and edit a MySQL database.
 
 ## Table of contents:
 
